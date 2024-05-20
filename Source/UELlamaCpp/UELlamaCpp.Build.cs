@@ -3,18 +3,17 @@
 using System;
 using System.IO;
 using UnrealBuildTool;
-using EpicGames.Core;
 
-public class LlamaCore : ModuleRules
+public class UELlamaCpp : ModuleRules
 {
-	private string PluginBinariesPath
-	{
-		get { return Path.GetFullPath(Path.Combine(ModuleDirectory, "../../Binaries")); }
-	}
+    private string PluginLlamacppPath
+    {
+        get { return Path.GetFullPath(Path.Combine(PluginDirectory, "ThirdParty", "LlamaCpp")); }
+    }
 
-	private string PluginLibPath
+    private string PluginLibPath
 	{
-		get { return Path.GetFullPath(Path.Combine(ModuleDirectory, "../../ThirdParty/LlamaCpp")); }
+		get { return Path.GetFullPath(Path.Combine(PluginLlamacppPath, "Libraries")); }
 	}
 
 	private void LinkDyLib(string DyLib)
@@ -25,7 +24,7 @@ public class LlamaCore : ModuleRules
 		RuntimeDependencies.Add(Path.Combine(PluginLibPath, MacPlatform, DyLib));
 	}
 
-	public LlamaCore(ReadOnlyTargetRules Target) : base(Target)
+	public UELlamaCpp(ReadOnlyTargetRules Target) : base(Target)
 	{
 		PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
 
@@ -80,11 +79,11 @@ public class LlamaCore : ModuleRules
 			}
 		);
 
-		PublicIncludePaths.Add(Path.Combine(PluginDirectory, "Includes"));
+		PublicIncludePaths.Add(Path.Combine(PluginLlamacppPath, "Includes"));
 
 		if (Target.Platform == UnrealTargetPlatform.Linux)
 		{
-			PublicAdditionalLibraries.Add(Path.Combine(PluginDirectory, "Libraries", "Linux", "libllama.so"));
+			PublicAdditionalLibraries.Add(Path.Combine(PluginLibPath, "Linux", "libllama.so"));
 		} 
 		else if (Target.Platform == UnrealTargetPlatform.Win64)
 		{
@@ -142,16 +141,10 @@ public class LlamaCore : ModuleRules
             PublicAdditionalLibraries.Add(Path.Combine(LlamaPath, "ggml_static.lib"));
 
 			System.Console.WriteLine("Llama-Unreal building using llama.lib at path " + LlamaPath);
-
-			//We do not use shared dll atm
-			//string WinLibDLLPath = Path.Combine(PluginLibPath, "Win64");
-
-			//RuntimeDependencies.Add("$(BinaryOutputDir)/llama.dll", Path.Combine(WinLibDLLPath, "llama.dll));
-			//RuntimeDependencies.Add("$(BinaryOutputDir)/ggml_shared.dll", Path.Combine(WinLibDLLPath, "ggml_shared.dll"));
 		}
 		else if (Target.Platform == UnrealTargetPlatform.Mac)
 		{
-			PublicAdditionalLibraries.Add(Path.Combine(PluginDirectory, "Libraries", "Mac", "libggml_static.a"));
+			PublicAdditionalLibraries.Add(Path.Combine(PluginLibPath, "Mac", "libggml_static.a"));
 			
 			//Dylibs act as both, so include them, add as lib and add as runtime dep
 			LinkDyLib("libllama.dylib");
@@ -160,8 +153,8 @@ public class LlamaCore : ModuleRules
 		else if (Target.Platform == UnrealTargetPlatform.Android)
 		{
 			//Built against NDK 25.1.8937393, API 26
-			PublicAdditionalLibraries.Add(Path.Combine(PluginDirectory, "Libraries", "Android", "libggml_static.a"));
-			PublicAdditionalLibraries.Add(Path.Combine(PluginDirectory, "Libraries", "Android", "libllama.a"));
+			PublicAdditionalLibraries.Add(Path.Combine(PluginLibPath, "Android", "libggml_static.a"));
+			PublicAdditionalLibraries.Add(Path.Combine(PluginLibPath, "Android", "libllama.a"));
 		}
 	}
 }

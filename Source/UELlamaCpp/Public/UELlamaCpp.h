@@ -5,7 +5,7 @@
 #include <CoreMinimal.h>
 #include <Modules/ModuleManager.h>
 
-class FLlamaCoreModule final : public IModuleInterface
+class FUELlamaCppModule final : public IModuleInterface
 {
 public:
   virtual void StartupModule() override;

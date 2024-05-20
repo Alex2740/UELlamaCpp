@@ -1,6 +1,6 @@
 // Copyright (c) 2023 Mika Pi, Modifications Copyright 2023-current Getnamo
 
-#include "LlamaCore.h"
+#include "UELlamaCpp.h"
 
 #define GGML_CUDA_DMMV_X 64
 #define GGML_CUDA_F16
@@ -11,15 +11,15 @@
 
 #include "llama.h"
 
-#define LOCTEXT_NAMESPACE "FLlamaCoreModule"
+#define LOCTEXT_NAMESPACE "FUELlamaCppModule"
 
-void FLlamaCoreModule::StartupModule()
+void FUELlamaCppModule::StartupModule()
 {
   llama_backend_init(true /*numa*/);
   IModuleInterface::StartupModule();
 }
 
-void FLlamaCoreModule::ShutdownModule()
+void FUELlamaCppModule::ShutdownModule()
 {
   IModuleInterface::ShutdownModule();
   llama_backend_free();
@@ -27,4 +27,4 @@ void FLlamaCoreModule::ShutdownModule()
 
 #undef LOCTEXT_NAMESPACE
 
-IMPLEMENT_MODULE(FLlamaCoreModule, LlamaCore)
+IMPLEMENT_MODULE(FUELlamaCppModule, UELlamaCpp)
