@@ -80,7 +80,7 @@ static bool gguf_ex_write(const std::string& fname) {
 
     gguf_write_to_file(ctx, fname.c_str(), false);
 
-    UE_LOG(LogTemp, Log, TEXT("%s: wrote file '%s;\n"), ANSI_TO_TCHAR(__func__), fname.c_str());
+    UE_LOG(LogTemp, Log, TEXT("%s: wrote file '%hs;\n"), ANSI_TO_TCHAR(__func__), fname.c_str());
 
     ggml_free(ctx_data);
     gguf_free(ctx);
@@ -171,7 +171,7 @@ static bool gguf_ex_read_1(const std::string& fname) {
         for (int i = 0; i < n_kv; ++i) {
             const char* key = gguf_get_key(ctx, i);
 
-            UE_LOG(LogTemp, Log, TEXT("%s: kv[%d]: key = %s\n"), ANSI_TO_TCHAR(__func__), i, key);
+            UE_LOG(LogTemp, Log, TEXT("%s: kv[%d]: key = %hs\n"), ANSI_TO_TCHAR(__func__), i, key);
         }
     }
 
@@ -205,7 +205,7 @@ static bool gguf_ex_read_1(const std::string& fname) {
             // print first 10 elements
             const float* data = (const float*)cur->data;
 
-            UE_LOG(LogTemp, Log, TEXT("%s data[:10] : "), name);
+            UE_LOG(LogTemp, Log, TEXT("%hs data[:10] : "), name);
             for (int j = 0; j < MIN(10, ggml_nelements(cur)); ++j) {
                 UE_LOG(LogTemp, Log, TEXT("%f "), data[j]);
             }
